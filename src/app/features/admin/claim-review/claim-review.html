@@ -1,0 +1,182 @@
+<div id="topbar-container" data-title="Claim Review"></div>
+
+<main class="p-8 pb-32 max-w-6xl mx-auto space-y-8">
+
+    <div class="flex items-center gap-4 mb-2">
+        <a routerLink="/admin/all-claims"
+            class="w-8 h-8 rounded-full border border-line flex items-center justify-center text-muted hover:bg-slate-50 transition-colors">
+            <i data-lucide="arrow-left" size="14"></i>
+        </a>
+        <h2 class="text-xl font-bold text-ink">Investigate Claim Liability</h2>
+    </div>
+
+    @if (loading()) {
+    <div class="card p-20 flex flex-col items-center justify-center gap-4">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        <p class="text-xs font-bold text-muted uppercase tracking-widest">Compiling Investigation Data...</p>
+    </div>
+    } @else if (claim()) {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column: Primary Details -->
+        <div class="lg:col-span-2 space-y-8">
+
+            <!-- Claim Narrative & Context -->
+            <div class="card p-0 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-line bg-slate-50/50 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-ink uppercase tracking-widest">Claim Overview</h3>
+                    <span
+                        class="px-3 py-1 bg-white border border-line text-[10px] font-bold text-muted uppercase tracking-widest shadow-sm">
+                        ID: #{{ claim().claimId }}
+                    </span>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <div class="flex gap-4">
+                        <div
+                            class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center shrink-0">
+                            <i data-lucide="file-warning" size="24"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-black text-ink mb-2">Liability Incident</h4>
+                            <p class="text-[11px] text-muted leading-relaxed whitespace-pre-line">{{ claim().description
+                                || 'No detailed description provided by the claimant.' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 pt-4 border-t border-line border-dashed">
+                        <div>
+                            <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Status</p>
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded-sm mt-0.5"
+                                [class.bg-amber-100]="claim().status === 'SUBMITTED'"
+                                [class.text-amber-700]="claim().status === 'SUBMITTED'"
+                                [class.bg-emerald-100]="claim().status === 'APPROVED'"
+                                [class.text-emerald-700]="claim().status === 'APPROVED'"
+                                [class.bg-rose-100]="claim().status === 'REJECTED'"
+                                [class.text-rose-700]="claim().status === 'REJECTED'">
+                                <span class="w-1.5 h-1.5 rounded-full"
+                                    [class.bg-amber-500]="claim().status === 'SUBMITTED'"
+                                    [class.bg-emerald-500]="claim().status === 'APPROVED'"
+                                    [class.bg-rose-500]="claim().status === 'REJECTED'">
+                                </span>
+                                {{ claim().status }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Filing Date</p>
+                            <p class="text-[11px] font-bold text-ink mt-1.5">{{ claim().claimDate }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Ledger -->
+            <div class="card p-0 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-line bg-slate-50/50">
+                    <h3 class="text-sm font-bold text-ink uppercase tracking-widest">Financial Demand Ledger</h3>
+                </div>
+
+                <div class="p-6 grid grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Requested Claim Amount
+                        </p>
+                        <h4 class="text-2xl font-black text-ink tracking-tight">₹{{ (claim().claimAmount ||
+                            0).toLocaleString() }}</h4>
+                    </div>
+
+                    @if (claim().status === 'APPROVED' || claim().status === 'REJECTED') {
+                    <div class="pl-8 border-l border-line border-dashed">
+                        <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Final Disbursed Payout
+                        </p>
+                        <h4 class="text-2xl font-black tracking-tight"
+                            [class.text-emerald-600]="claim().payoutAmount > 0"
+                            [class.text-rose-600]="claim().payoutAmount === 0">
+                            ₹{{ (claim().payoutAmount || 0).toLocaleString() }}
+                        </h4>
+                    </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Verification & Decisions -->
+        <div class="space-y-8">
+
+            <!-- Policy Attachment -->
+            <div class="card p-5 overflow-hidden shadow-sm flex items-center justify-between border border-line">
+                <div>
+                    <h3 class="text-[10px] font-bold text-muted uppercase tracking-widest mb-1">Attached To Policy</h3>
+                    <p class="text-lg font-black text-ink">Pol-{{ claim().policyId }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="shield" size="18"></i>
+                </div>
+            </div>
+
+            <!-- Active Claim Adjudication Block -->
+            @if (claim().status === 'SUBMITTED') {
+            <div class="card bg-slate-900 border-none p-6 text-white shadow-xl space-y-6">
+                <div>
+                    <p
+                        class="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                        <i data-lucide="calculator" size="14"></i>
+                        Adjudicate Payout
+                    </p>
+
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Adjust
+                        Verified Liability</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white font-bold opacity-50">₹</span>
+                        <input type="number" min="0" [ngModel]="verifiedLoss()"
+                            (ngModelChange)="updateVerifiedLoss($event)"
+                            class="w-full pl-8 pr-4 py-4 bg-white/10 border border-white/20 text-xl font-black tabular-nums text-white rounded-md focus:border-emerald-500 focus:bg-white/20 outline-none transition-all placeholder:text-white/20">
+                    </div>
+                    <p class="text-[9px] text-slate-500 mt-2 font-bold uppercase tracking-widest">
+                        Warning: This represents the final approved coverage limit that will be disbursed.
+                    </p>
+                </div>
+
+                <div class="space-y-3 pt-6 border-t border-white/10">
+                    <button (click)="approve()" [disabled]="processing()"
+                        class="w-full btn-primary bg-emerald-500 hover:bg-emerald-600 border-none text-white py-4 shadow-lg shadow-emerald-900/50 flex items-center justify-center gap-2 disabled:opacity-50 transition-all">
+                        @if(processing()) {
+                        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        Finalizing Transfer...
+                        } @else {
+                        <i data-lucide="check-circle" size="16"></i>
+                        Approve Verified Payout
+                        }
+                    </button>
+
+                    <button (click)="reject()" [disabled]="processing()"
+                        class="w-full btn-secondary text-white border-white/20 hover:bg-rose-600 hover:text-white hover:border-rose-600 focus:ring-rose-500 flex items-center justify-center gap-2 disabled:opacity-50 transition-all">
+                        <i data-lucide="x-circle" size="16"></i>
+                        Reject Claim Totally
+                    </button>
+                </div>
+            </div>
+            } @else {
+            <!-- Read-only Conclusion State -->
+            <div
+                class="card bg-slate-50 border border-line p-6 flex flex-col items-center justify-center text-center gap-3">
+                @if (claim().status === 'APPROVED') {
+                <i data-lucide="shield-check" size="48" class="text-emerald-500 opacity-80"></i>
+                <h4 class="text-sm font-black uppercase tracking-widest text-emerald-700">Claim Resolved</h4>
+                <p class="text-[10px] text-muted font-bold tracking-widest">Funds successfully disbursed.</p>
+                } @else {
+                <i data-lucide="shield-alert" size="48" class="text-rose-500 opacity-80"></i>
+                <h4 class="text-sm font-black uppercase tracking-widest text-rose-700">Claim Rejected</h4>
+                <p class="text-[10px] text-muted font-bold tracking-widest">Liability denied following review.</p>
+                }
+            </div>
+            }
+
+        </div>
+
+    </div>
+    }
+
+</main>

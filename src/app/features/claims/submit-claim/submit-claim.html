@@ -1,0 +1,91 @@
+<div id="topbar-container" data-title="Submit Claim"></div>
+
+<main class="p-8">
+    <div class="max-w-2xl mx-auto space-y-8">
+
+        <!-- Header/Instruction -->
+        <div class="flex items-center gap-4 p-6 bg-rose-50 border border-rose-100 rounded-2xl">
+            <div class="w-12 h-12 bg-rose-500 text-white rounded-xl flex items-center justify-center shrink-0">
+                <i data-lucide="alert-circle"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-slate-900">Submit an Incident Claim</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Provide detailed information about the AI-related incident, including the affected system and the
+                    financial impact.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            @if(loading()) {
+            <div class="flex flex-col items-center justify-center py-12 gap-3">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <p class="text-[10px] text-muted uppercase tracking-widest font-bold">Retrieving Policies...</p>
+            </div>
+            } @else {
+            <form class="space-y-6" [formGroup]="form" (ngSubmit)="submit()">
+
+                <div>
+                    <label class="label">Select Policy</label>
+                    <select class="input-field" formControlName="policyId">
+                        <option value="">Choose an active policy</option>
+                        @for(policy of policies(); track policy.policyId) {
+                        <option [value]="policy.policyId">
+                            POL-{{policy.policyId}} (System #{{policy.aiSystemId}})
+                        </option>
+                        }
+                    </select>
+                    @if(form.get('policyId')?.touched && form.get('policyId')?.errors?.['required']) {
+                    <p class="text-[10px] text-rose-500 mt-1 uppercase font-bold">Policy selection is required</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="label">Estimated Claim Amount (₹)</label>
+                    <input type="number" class="input-field" formControlName="claimAmount"
+                        placeholder="Enter amount in ₹">
+                    @if(form.get('claimAmount')?.touched && form.get('claimAmount')?.invalid) {
+                    <p class="text-[10px] text-rose-500 mt-1 uppercase font-bold">Please enter a valid amount</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="label">Incident Description</label>
+                    <textarea class="input-field min-h-[120px] resize-none" formControlName="claimDescription"
+                        placeholder="Describe the incident, model failure, or bias event in detail..."></textarea>
+                    @if(form.get('claimDescription')?.touched && form.get('claimDescription')?.invalid) {
+                    <p class="text-[10px] text-rose-500 mt-1 uppercase font-bold">Minimum 10 characters required</p>
+                    }
+                </div>
+
+                <div class="flex items-center gap-4 pt-4">
+                    <button type="button" class="btn-secondary flex-1" routerLink="/company/my-policies">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="btn-primary flex-[2] bg-rose-600 hover:bg-rose-700 border-none transition-all disabled:opacity-50"
+                        [disabled]="form.invalid || submitting()">
+                        @if(submitting()) {
+                        <span class="flex items-center gap-2 justify-center">
+                            <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                            Submitting...
+                        </span>
+                        } @else {
+                        Submit Claim Request
+                        }
+                    </button>
+                </div>
+
+            </form>
+            }
+        </div>
+
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic">
+            <p class="text-xs text-slate-500 leading-relaxed text-center">
+                Note: All claims are subject to technical audit by InsureAI underwriters.
+                Ensure logs and impact reports are ready for verification.
+            </p>
+        </div>
+    </div>
+</main>

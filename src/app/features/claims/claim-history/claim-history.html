@@ -1,0 +1,102 @@
+<div id="topbar-container" data-title="Claim History"></div>
+
+<main class="p-8 space-y-8">
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card bg-slate-50 border-none">
+            <p class="text-[10px] font-bold text-muted uppercase tracking-widest mb-1">Total Claims Filed</p>
+            <p class="text-xl font-bold text-ink">₹{{totalClaimed().toLocaleString()}}</p>
+        </div>
+        <div class="card bg-emerald-50 border-none">
+            <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Total Payouts Received</p>
+            <p class="text-xl font-bold text-emerald-700">₹{{approvedAmount().toLocaleString()}}</p>
+        </div>
+        <div class="card bg-primary/5 border-none">
+            <p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Active Claim Count</p>
+            <p class="text-xl font-bold text-primary">{{claims().length}}</p>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    @if(loading()) {
+    <div class="flex flex-col items-center justify-center py-20 gap-3">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <p class="text-[10px] text-muted uppercase tracking-widest font-bold">Fetching History...</p>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if(!loading() && claims().length === 0){
+    <div class="card text-center py-20 bg-slate-50/50 border-dashed">
+        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+            <i data-lucide="history" size="32"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-800">No Incidents Reported</h3>
+        <p class="text-sm text-slate-500 max-w-sm mx-auto mt-1">
+            Your claim history is currently empty. Any insurance claims you file will appear here.
+        </p>
+    </div>
+    }
+
+    <!-- List -->
+    <div class="space-y-4">
+        @for(claim of claims(); track claim.claimId){
+        <div class="card group hover:border-primary/30 transition-all border-l-4"
+            [style.border-left-color]="claim.status === 'APPROVED' ? '#10b981' : (claim.status === 'REJECTED' ? '#f43f5e' : '#eab308')">
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            CLM-{{claim.claimId}}
+                        </span>
+
+                        <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                            [class.bg-emerald-50]="claim.status === 'APPROVED'"
+                            [class.text-emerald-700]="claim.status === 'APPROVED'"
+                            [class.border-emerald-200]="claim.status === 'APPROVED'"
+                            [class.bg-yellow-50]="claim.status === 'SUBMITTED' || claim.status === 'PENDING'"
+                            [class.text-yellow-700]="claim.status === 'SUBMITTED' || claim.status === 'PENDING'"
+                            [class.border-yellow-200]="claim.status === 'SUBMITTED' || claim.status === 'PENDING'"
+                            [class.bg-rose-50]="claim.status === 'REJECTED'"
+                            [class.text-rose-700]="claim.status === 'REJECTED'"
+                            [class.border-rose-200]="claim.status === 'REJECTED'">
+                            {{claim.status}}
+                        </span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">
+                        Policy: POL-{{claim.policyId}}
+                    </h3>
+
+                    <p class="text-sm text-slate-600 line-clamp-2 max-w-2xl">
+                        {{claim.claimDescription}}
+                    </p>
+
+                    <p class="text-[10px] text-slate-400 mt-2 font-medium uppercase tracking-tight">
+                        Filed on {{claim.claimDate || 'Recent'}}
+                    </p>
+                </div>
+
+                <div
+                    class="flex gap-8 items-center md:pl-8 md:border-l border-slate-100 min-w-[200px] justify-between md:justify-end">
+                    <div class="text-left md:text-right">
+                        <p class="text-[9px] text-slate-400 uppercase font-black tracking-widest mb-1">Claim Amount</p>
+                        <p class="text-base font-bold text-slate-700">₹{{(claim.claimAmount || 0).toLocaleString()}}</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-400 uppercase font-black tracking-widest mb-1">Payout</p>
+                        <p class="text-xl font-black" [class.text-emerald-600]="claim.status === 'APPROVED'"
+                            [class.text-slate-300]="claim.status !== 'APPROVED'">
+                            ₹{{(claim.payoutAmount || 0).toLocaleString()}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+</main>

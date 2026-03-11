@@ -1,0 +1,138 @@
+<div id="topbar-container" data-title="My Policies"></div>
+
+<main class="p-8 space-y-8">
+
+    <!-- Search + New Policy -->
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+        <div class="relative flex-1 max-w-md">
+            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size="18"></i>
+
+            <input type="text" placeholder="Search by ID, Status, or System..." class="input-field !pl-12"
+                [ngModel]="searchTerm()" (ngModelChange)="updateSearch($event)">
+        </div>
+
+        <a routerLink="/company/policy-types" class="btn-primary flex items-center gap-2">
+            <i data-lucide="plus" size="16"></i>
+            New Policy Application
+        </a>
+
+    </div>
+
+
+    <!-- Loading -->
+
+    @if(loading()){
+
+    <div class="flex flex-col items-center justify-center py-20 gap-4">
+
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <p class="text-xs text-muted uppercase tracking-widest font-bold">Synchronizing Coverage...</p>
+
+    </div>
+
+    } @else if(filteredPolicies().length === 0){
+
+    <div
+        class="flex flex-col items-center justify-center py-20 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="shield-off" class="text-slate-400" size="32"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">No Policies Found</h3>
+        <p class="text-slate-500 max-w-sm">
+            We couldn't find any policies matching your criteria.
+            Try adjusting your search or apply for a new policy.
+        </p>
+    </div>
+
+    } @else {
+
+    <!-- Policies -->
+
+    <div class="grid gap-6">
+        @for(policy of filteredPolicies(); track policy.policyId){
+
+        <div class="card group hover:border-primary/40 transition-all">
+
+            <div class="flex flex-col lg:flex-row lg:items-center gap-8">
+
+                <div class="flex-1">
+
+                    <div class="flex items-center gap-3 mb-2">
+
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            POL-{{policy.policyId}}
+                        </span>
+
+                        <span class="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider border"
+                            [class.bg-emerald-50]="policy.status === 'ACTIVE'"
+                            [class.text-emerald-700]="policy.status === 'ACTIVE'"
+                            [class.border-emerald-200]="policy.status === 'ACTIVE'"
+                            [class.bg-yellow-50]="policy.status === 'PENDING_APPROVAL'"
+                            [class.text-yellow-700]="policy.status === 'PENDING_APPROVAL'"
+                            [class.border-yellow-200]="policy.status === 'PENDING_APPROVAL'"
+                            [class.bg-rose-50]="policy.status === 'REJECTED' || policy.status === 'EXPIRED'"
+                            [class.text-rose-700]="policy.status === 'REJECTED' || policy.status === 'EXPIRED'"
+                            [class.border-rose-200]="policy.status === 'REJECTED' || policy.status === 'EXPIRED'">
+
+                            {{policy.status?.replace('_', ' ')}}
+
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">
+                        AI System #{{policy.aiSystemId}}
+                    </h3>
+
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4">
+                        <div>
+                            <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Coverage Limit</p>
+                            <p class="text-sm font-bold text-slate-700">₹{{(policy.coverageLimit ||
+                                0).toLocaleString()}}</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Monthly Premium
+                            </p>
+                            <p class="text-sm font-bold text-primary">₹{{(policy.premiumAmount || 0).toLocaleString()}}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">Validity Period
+                            </p>
+                            <p class="text-[11px] font-medium text-slate-500">
+                                {{policy.startDate}} — {{policy.endDate}}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="flex items-center gap-4 lg:pl-8 lg:border-l border-slate-100">
+
+                    @if(policy.status === 'ACTIVE'){
+                    <a [routerLink]="['/company/submit-claim']" [queryParams]="{ policyId: policy.policyId }"
+                        class="btn-primary text-[10px] py-2 px-6 uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="alert-circle" size="14"></i>
+                        File a Claim
+                    </a>
+                    }
+
+                    <a routerLink="/company/claim-history"
+                        class="p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                        title="View Policy History">
+                        <i data-lucide="file-text" size="20"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+    </div>
+    }
+</main>

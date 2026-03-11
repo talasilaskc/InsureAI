@@ -1,0 +1,200 @@
+<div id="topbar-container" data-title="Claims Dashboard"></div>
+
+<main class="p-8 space-y-8 max-w-[1400px] mx-auto">
+    <!-- Page Header -->
+    <div>
+        <h2 class="text-xl font-bold text-ink tracking-tight">Claims Operations</h2>
+        <p class="text-[11px] text-muted mt-1 uppercase tracking-widest font-bold">Review, adjudicate, and audit
+            liability claims</p>
+    </div>
+
+    @if (loading()) {
+    <div class="card p-20 flex flex-col items-center justify-center gap-4">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        <p class="text-[10px] font-bold text-muted uppercase tracking-[0.2em]">Compiling Claims Ledger...</p>
+    </div>
+    } @else {
+    <!-- Statistics Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="card p-6 border-b-4 border-slate-300 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.15em]">Total Claims</p>
+                <i data-lucide="layers" size="16" class="text-slate-400"></i>
+            </div>
+            <h3 class="text-3xl font-black text-ink">{{ totalClaims() }}</h3>
+        </div>
+
+        <div class="card p-6 border-b-4 border-amber-400 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[10px] font-black text-amber-600 uppercase tracking-[0.15em]">Pending Review</p>
+                <i data-lucide="clock" size="16" class="text-amber-500"></i>
+            </div>
+            <h3 class="text-3xl font-black text-ink">{{ submittedClaimsCount() }}</h3>
+        </div>
+
+        <div class="card p-6 border-b-4 border-emerald-500 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[10px] font-black text-emerald-600 uppercase tracking-[0.15em]">Approved & Paid</p>
+                <i data-lucide="check-circle" size="16" class="text-emerald-500"></i>
+            </div>
+            <h3 class="text-3xl font-black text-ink">{{ approvedClaimsCount() }}</h3>
+        </div>
+
+        <div class="card p-6 bg-slate-900 text-white border-none flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Total Capital Disbursed</p>
+                <i data-lucide="badge-indian-rupee" size="16" class="text-slate-400"></i>
+            </div>
+            <h3 class="text-3xl font-black italic text-emerald-400">₹{{ totalPayout().toLocaleString() }}</h3>
+        </div>
+    </div>
+
+    <!-- Comprehensive Claims Table Panel -->
+    <div class="card p-0 overflow-hidden shadow-sm border border-line">
+        <div
+            class="p-6 border-b border-line bg-slate-50/70 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h3 class="text-sm font-bold text-ink uppercase tracking-widest">Master Claims Ledger</h3>
+            </div>
+
+            <div class="relative min-w-[200px]">
+                <i data-lucide="filter" class="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size="14"></i>
+                <select (change)="filterClaims($event)"
+                    class="w-full pl-9 pr-8 py-2.5 bg-white border border-line text-[10px] font-bold uppercase tracking-widest text-ink focus:border-primary outline-none appearance-none rounded-md shadow-sm">
+                    <option value="">All Statuses</option>
+                    <option value="SUBMITTED">Pending Assessment</option>
+                    <option value="APPROVED">Funded / Approved</option>
+                    <option value="REJECTED">Denied</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white border-b border-line">
+                        <th
+                            class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-muted whitespace-nowrap">
+                            ID / Policy</th>
+                        <th
+                            class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-muted text-right whitespace-nowrap">
+                            Claimed Amount</th>
+                        <th
+                            class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-muted text-center whitespace-nowrap">
+                            Status</th>
+                        <th
+                            class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-muted text-right whitespace-nowrap">
+                            Verified / Payout</th>
+                        <th
+                            class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.15em] text-muted text-right whitespace-nowrap">
+                            Actions / Details</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-line/40">
+                    @for (claim of filteredClaims(); track claim.claimId) {
+                    <tr class="transition-colors group" [class.bg-amber-50/20]="claim.status === 'SUBMITTED'"
+                        [class.hover:bg-slate-50]="claim.status !== 'SUBMITTED'">
+
+                        <!-- Identifier Column -->
+                        <td class="px-6 py-5">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-black text-ink">#{{ claim.claimId }}</span>
+                                <span class="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Pol-{{
+                                    claim.policyId }}</span>
+                            </div>
+                        </td>
+
+                        <!-- Claim Amount -->
+                        <td class="px-6 py-5 text-right">
+                            <p class="text-sm font-black text-slate-500">₹{{ (claim.claimAmount || 0).toLocaleString()
+                                }}</p>
+                            <p class="text-[9px] font-bold text-muted uppercase mt-1">{{ claim.claimDate }}</p>
+                        </td>
+
+                        <!-- Status Badge -->
+                        <td class="px-6 py-5 text-center">
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded-sm border"
+                                [class.bg-amber-50]="claim.status === 'SUBMITTED'"
+                                [class.text-amber-700]="claim.status === 'SUBMITTED'"
+                                [class.border-amber-200]="claim.status === 'SUBMITTED'"
+                                [class.bg-emerald-50]="claim.status === 'APPROVED'"
+                                [class.text-emerald-700]="claim.status === 'APPROVED'"
+                                [class.border-emerald-200]="claim.status === 'APPROVED'"
+                                [class.bg-rose-50]="claim.status === 'REJECTED'"
+                                [class.text-rose-700]="claim.status === 'REJECTED'"
+                                [class.border-rose-200]="claim.status === 'REJECTED'">
+                                <span class="w-1.5 h-1.5 rounded-full"
+                                    [class.bg-amber-500]="claim.status === 'SUBMITTED'"
+                                    [class.bg-emerald-500]="claim.status === 'APPROVED'"
+                                    [class.bg-rose-500]="claim.status === 'REJECTED'">
+                                </span>
+                                {{ claim.status }}
+                            </span>
+                        </td>
+
+                        <!-- Verified Loss / Payout -->
+                        <td class="px-6 py-5 text-right">
+                            @if(claim.status === 'SUBMITTED') {
+                            <div class="flex flex-col items-end gap-1">
+                                <div class="relative w-32">
+                                    <span
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-muted font-bold text-[10px]">₹</span>
+                                    <input type="number" min="0" [(ngModel)]="verifiedLossInputs[claim.claimId]"
+                                        placeholder="Verified Amt"
+                                        class="w-full pl-6 pr-2 py-1.5 bg-white border border-amber-300 text-xs font-black tabular-nums text-ink rounded focus:border-amber-500 outline-none transition-colors shadow-sm">
+                                </div>
+                                <p class="text-[8px] text-amber-600 font-bold uppercase tracking-widest">Awaiting Input
+                                </p>
+                            </div>
+                            } @else {
+                            <div class="flex flex-col items-end">
+                                <p class="text-sm font-black" [class.text-emerald-600]="claim.status === 'APPROVED'"
+                                    [class.text-muted]="claim.status === 'REJECTED'">
+                                    ₹{{ (claim.verifiedLoss || 0).toLocaleString() }}
+                                </p>
+                                <p class="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">Final Payout
+                                </p>
+                            </div>
+                            }
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="px-6 py-5 text-right w-[200px]">
+                            @if(claim.status === 'SUBMITTED') {
+                            <div class="flex items-center justify-end gap-2">
+                                <button (click)="approveClaim(claim)"
+                                    class="p-2 bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white transition-all rounded shadow-sm"
+                                    title="Approve Claim">
+                                    <i data-lucide="check" size="16"></i>
+                                </button>
+                                <button (click)="rejectClaim(claim)"
+                                    class="p-2 bg-white text-rose-500 border border-rose-200 hover:bg-rose-500 hover:text-white transition-all rounded shadow-sm"
+                                    title="Reject Claim">
+                                    <i data-lucide="x" size="16"></i>
+                                </button>
+                            </div>
+                            } @else {
+                            <div class="flex justify-end pr-3">
+                                <i data-lucide="lock" size="14" class="text-slate-300" title="Claim Locked"></i>
+                            </div>
+                            }
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="5" class="px-6 py-24 text-center bg-slate-50/30">
+                            <div class="flex flex-col items-center gap-3 opacity-40">
+                                <i data-lucide="file-search" size="48" class="text-slate-400"></i>
+                                <p class="text-sm font-bold text-ink uppercase tracking-widest">No Claims Found</p>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+
+</main>
