@@ -1,27 +1,36 @@
-import { Component, inject, AfterViewInit } from '@angular/core';
+import { Component, inject, AfterViewInit, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AiSystemService } from '../../../services/ai-system-service';
-
-declare const lucide: any;
+import { CommonModule } from '@angular/common';
+import { CompanyService } from '../../../services/company-service';
+declare const lucide: unknown;
 
 @Component({
   selector: 'app-register-ai-system',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register-ai-system.html',
   styleUrl: './register-ai-system.css'
 })
-export class RegisterAiSystem implements AfterViewInit {
+export class RegisterAiSystem implements AfterViewInit, OnInit {
 
-  ngAfterViewInit() {
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-  }
-
+  companyService = inject(CompanyService);
   fb = inject(FormBuilder);
   router = inject(Router);
   aiService = inject(AiSystemService);
+
+  ngAfterViewInit() {
+    if (typeof lucide !== 'undefined') {
+      (lucide as any).createIcons();
+    }
+    
+  }
+
+  ngOnInit(): void {
+    this.companyService.title.set("Register AI System");
+  }
+
+  get f() { return this.aiForm.controls; }
 
   aiForm = this.fb.group({
 
@@ -53,7 +62,8 @@ export class RegisterAiSystem implements AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to register AI system", err);
-        alert("Failed to register AI system. Please check your network and try again.");
+        const msg = err.error?.message || "Failed to register AI system. Please check your network and try again.";
+        alert(msg);
       }
 
     });

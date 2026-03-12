@@ -36,6 +36,8 @@ export class AdminPolicies implements OnInit, AfterViewInit {
       },
       error:(err)=>{
         console.error(err);
+        const msg = err.error?.message || "Failed to load policy portfolio.";
+        alert(msg);
         this.loading.set(false);
         this.error.set(true);
       }

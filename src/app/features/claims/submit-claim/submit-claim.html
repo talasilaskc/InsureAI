@@ -27,8 +27,9 @@
             <form class="space-y-6" [formGroup]="form" (ngSubmit)="submit()">
 
                 <div>
-                    <label class="label">Select Policy</label>
-                    <select class="input-field" formControlName="policyId">
+                    <label class="label">Select Policy <span class="text-rose-500">*</span></label>
+                    <select class="input-field" formControlName="policyId"
+                        [ngClass]="{'border-rose-500': f.policyId.invalid && f.policyId.touched}">
                         <option value="">Choose an active policy</option>
                         @for(policy of policies(); track policy.policyId) {
                         <option [value]="policy.policyId">
@@ -42,18 +43,20 @@
                 </div>
 
                 <div>
-                    <label class="label">Estimated Claim Amount (₹)</label>
+                    <label class="label">Estimated Claim Amount (₹) <span class="text-rose-500">*</span></label>
                     <input type="number" class="input-field" formControlName="claimAmount"
-                        placeholder="Enter amount in ₹">
+                        placeholder="Enter amount in ₹"
+                        [ngClass]="{'border-rose-500': f.claimAmount.invalid && f.claimAmount.touched}">
                     @if(form.get('claimAmount')?.touched && form.get('claimAmount')?.invalid) {
                     <p class="text-[10px] text-rose-500 mt-1 uppercase font-bold">Please enter a valid amount</p>
                     }
                 </div>
 
                 <div>
-                    <label class="label">Incident Description</label>
+                    <label class="label">Incident Description <span class="text-rose-500">*</span></label>
                     <textarea class="input-field min-h-[120px] resize-none" formControlName="claimDescription"
-                        placeholder="Describe the incident, model failure, or bias event in detail..."></textarea>
+                        placeholder="Describe the incident, model failure, or bias event in detail..."
+                        [ngClass]="{'border-rose-500': f.claimDescription.invalid && f.claimDescription.touched}"></textarea>
                     @if(form.get('claimDescription')?.touched && form.get('claimDescription')?.invalid) {
                     <p class="text-[10px] text-rose-500 mt-1 uppercase font-bold">Minimum 10 characters required</p>
                     }

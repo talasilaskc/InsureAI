@@ -64,7 +64,8 @@ export class PolicyReview implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to approve policy", err);
-        alert("Verification failed. Please try again.");
+        const msg = err.error?.message || "Verification failed. Please try again.";
+        alert(msg);
         this.submitting.set(false);
       }
     });
@@ -81,7 +82,8 @@ export class PolicyReview implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to reject policy", err);
-        alert("Verification failed. Please try again.");
+        const msg = err.error?.message || "Verification failed. Please try again.";
+        alert(msg);
         this.submitting.set(false);
       }
     });

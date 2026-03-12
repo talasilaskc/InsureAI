@@ -35,6 +35,8 @@ export class PolicyManagement implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load policy types:', err);
+        const msg = err.error?.message || "Failed to load policy types";
+        alert(msg);
         this.loading.set(false);
       }
     });
@@ -59,6 +61,8 @@ export class PolicyManagement implements OnInit {
       },
       error: (err) => {
         console.error('Failed to deactivate policy type:', err);
+        const msg = err.error?.message || "Failed to deactivate policy product.";
+        alert(msg);
       }
     });
   }

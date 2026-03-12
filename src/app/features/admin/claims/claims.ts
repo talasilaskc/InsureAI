@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ClaimService } from '../../../services/claim-service';
 import { AdminService } from '../../../services/admin';
@@ -10,7 +9,7 @@ declare const lucide: any;
 @Component({
   selector: 'app-claims',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './claims.html',
   styleUrl: './claims.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -48,6 +47,8 @@ export class Claims implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to load claims", err);
+        const msg = err.error?.message || "Failed to load claims";
+        alert(msg);
         this.loading.set(false);
       }
     });
@@ -88,7 +89,11 @@ export class Claims implements OnInit, AfterViewInit {
         ));
         this.refreshIcons();
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        const msg = err.error?.message || "Failed to approve claim";
+        alert(msg);
+      }
     });
   }
 
@@ -102,7 +107,11 @@ export class Claims implements OnInit, AfterViewInit {
         ));
         this.refreshIcons();
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        const msg = err.error?.message || "Failed to reject claim";
+        alert(msg);
+      }
     });
   }
 }

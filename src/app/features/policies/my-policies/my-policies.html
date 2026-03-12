@@ -57,6 +57,12 @@
 
             <div class="flex flex-col lg:flex-row lg:items-center gap-8">
 
+                <!-- Dynamic AI System Logo -->
+                <div class="hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shrink-0"
+                     [ngClass]="getSystemColor(policy.aiSystemId)">
+                    <i [attr.data-lucide]="getSystemIcon(policy.aiSystemId)" size="32"></i>
+                </div>
+
                 <div class="flex-1">
 
                     <div class="flex items-center gap-3 mb-2">

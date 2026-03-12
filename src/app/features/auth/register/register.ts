@@ -69,7 +69,8 @@ export class Register implements AfterViewInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        alert('Registration failed. Please try again.');
+        const msg = err.error?.message || 'Registration failed. Please try again.';
+        alert(msg);
         console.error('Registration error:', err);
       }
     });

@@ -27,6 +27,8 @@ export class SubmitClaim implements OnInit, AfterViewInit {
   loading = signal<boolean>(true);
   submitting = signal<boolean>(false);
 
+  get f() { return this.form.controls; }
+
   form = this.fb.group({
     policyId: ['', Validators.required],
     claimAmount: ['', [Validators.required, Validators.min(1)]],
@@ -86,7 +88,8 @@ export class SubmitClaim implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Claim submission failed", err);
-        alert("Failed to submit claim. Please check your connection and try again.");
+        const msg = err.error?.message || "Failed to submit claim. Please check your connection and try again.";
+        alert(msg);
         this.submitting.set(false);
       }
     });

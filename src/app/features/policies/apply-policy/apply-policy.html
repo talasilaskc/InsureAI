@@ -41,10 +41,11 @@
                 <label class="block">
 
                     <span class="text-sm font-medium">
-                        Select AI System
+                        Select AI System <span class="text-rose-500">*</span>
                     </span>
 
-                    <select class="input-field" formControlName="aiSystemId">
+                    <select class="input-field" formControlName="aiSystemId"
+                        [ngClass]="{'border-rose-500': f.aiSystemId.invalid && f.aiSystemId.touched}">
 
                         <option value="">Select System</option>
 
@@ -61,36 +62,51 @@
                         }
 
                     </select>
+                    @if(f.aiSystemId.invalid && f.aiSystemId.touched){
+                        <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">AI System is required</p>
+                    }
 
                 </label>
 
                 <label class="block">
 
                     <span class="text-sm font-medium">
-                        Coverage Limit
+                        Coverage Limit <span class="text-rose-500">*</span>
                     </span>
 
-                    <input type="number" class="input-field" formControlName="coverageLimit">
+                    <input type="number" class="input-field" formControlName="coverageLimit"
+                        [ngClass]="{'border-rose-500': f.coverageLimit.invalid && f.coverageLimit.touched}">
+                    @if(f.coverageLimit.invalid && f.coverageLimit.touched){
+                        <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Coverage limit must be valid</p>
+                    }
 
                 </label>
 
                 <label class="block">
 
                     <span class="text-sm font-medium">
-                        Deductible Amount
+                        Deductible Amount <span class="text-rose-500">*</span>
                     </span>
 
-                    <input type="number" class="input-field" formControlName="deductibleAmount">
+                    <input type="number" class="input-field" formControlName="deductibleAmount"
+                        [ngClass]="{'border-rose-500': f.deductibleAmount.invalid && f.deductibleAmount.touched}">
+                    @if(f.deductibleAmount.invalid && f.deductibleAmount.touched){
+                        <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Deductible amount is required</p>
+                    }
 
                 </label>
 
                 <label class="block">
 
                     <span class="text-sm font-medium">
-                        Tenure (Years)
+                        Tenure (Years) <span class="text-rose-500">*</span>
                     </span>
 
-                    <input type="number" class="input-field" formControlName="tenureYears">
+                    <input type="number" class="input-field" formControlName="tenureYears"
+                        [ngClass]="{'border-rose-500': f.tenureYears.invalid && f.tenureYears.touched}">
+                    @if(f.tenureYears.invalid && f.tenureYears.touched){
+                        <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Tenure is required</p>
+                    }
 
                 </label>
 

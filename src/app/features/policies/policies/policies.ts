@@ -42,6 +42,8 @@ export class Policies implements OnInit {
       },
       error: (err: any) => {
         console.error("Failed to load policies", err);
+        const msg = err.error?.message || "Failed to load policies";
+        alert(msg);
         this.loading.set(false);
       }
     });

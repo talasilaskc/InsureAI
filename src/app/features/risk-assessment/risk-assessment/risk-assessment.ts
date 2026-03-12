@@ -30,6 +30,8 @@ export class RiskAssessment implements OnInit, AfterViewInit {
   systems = signal<any[]>([]);
   riskResult = signal<any>(null);
 
+  get f() { return this.riskForm.controls; }
+
   riskForm = this.fb.group({
 
     aiSystemId: ['', Validators.required],
@@ -77,7 +79,8 @@ export class RiskAssessment implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Risk assessment failed", err);
-        alert("Failed to evaluate risk. Please ensure all values form a valid system request.");
+        const msg = err.error?.message || "Failed to evaluate risk. Please ensure all values form a valid system request.";
+        alert(msg);
       }
 
     });

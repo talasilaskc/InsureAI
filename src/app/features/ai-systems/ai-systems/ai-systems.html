@@ -30,8 +30,8 @@
         @for (system of systems(); track system.id) {
         <div class="card group hover:border-primary/30 transition-all">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center">
-                    <i data-lucide="cpu"></i>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" [ngClass]="getSystemColor(system.modelType)">
+                    <i [attr.data-lucide]="getSystemIcon(system.modelType)"></i>
                 </div>
                 <button class="text-slate-400 hover:text-slate-600"><i data-lucide="more-vertical"></i></button>
             </div>

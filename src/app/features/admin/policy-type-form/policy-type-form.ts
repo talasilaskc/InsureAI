@@ -29,6 +29,8 @@ export class PolicyTypeForm implements OnInit, AfterViewInit {
   loading = signal<boolean>(false);
   submitting = signal<boolean>(false);
 
+  get f() { return this.form.controls; }
+
   form = this.fb.group({
     name: ['', Validators.required],
     description: ['', [Validators.required, Validators.maxLength(500)]],
@@ -90,7 +92,8 @@ export class PolicyTypeForm implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to load policy types", err);
-        alert("Failed to load policy product. Taking you back.");
+        const msg = err.error?.message || "Failed to load policy product. Taking you back.";
+        alert(msg);
         this.router.navigate(['/admin/all-policies']);
         this.loading.set(false);
       }
@@ -113,7 +116,8 @@ export class PolicyTypeForm implements OnInit, AfterViewInit {
         },
         error: (err) => {
           console.error("Failed to update policy product", err);
-          alert("Error saving configuration.");
+          const msg = err.error?.message || "Error saving configuration.";
+          alert(msg);
           this.submitting.set(false);
         }
       });
@@ -124,7 +128,8 @@ export class PolicyTypeForm implements OnInit, AfterViewInit {
         },
         error: (err) => {
           console.error("Failed to create policy product", err);
-          alert("Error creating configuration.");
+          const msg = err.error?.message || "Error creating configuration.";
+          alert(msg);
           this.submitting.set(false);
         }
       });

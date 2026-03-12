@@ -17,7 +17,7 @@
             <form class="space-y-6" (ngSubmit)="login()" #loginForm="ngForm">
                 <div>
                     <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">Email
-                        Address</label>
+                        Address <span class="text-rose-500">*</span></label>
                     <div class="relative">
                         <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size="16"></i>
                         <input 
@@ -26,7 +26,8 @@
                             placeholder="name@company.com"
                             class="input-field pl-12"
                             [ngClass]="{'border-rose-500': emailCtrl.invalid && emailCtrl.touched}"
-                            [(ngModel)]="email"
+                            [ngModel]="email()"
+                            (ngModelChange)="email.set($event)"
                             name="email"
                             #emailCtrl="ngModel">
                     </div>
@@ -35,7 +36,7 @@
                     }
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">Password</label>
+                    <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">Password <span class="text-rose-500">*</span></label>
                     <div class="relative">
                         <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size="16"></i>
                         <input
@@ -44,7 +45,8 @@
                             placeholder="••••••••"
                             class="input-field pl-12"
                             [ngClass]="{'border-rose-500': passwordCtrl.invalid && passwordCtrl.touched}"
-                            [(ngModel)]="password"
+                            [ngModel]="password()"
+                            (ngModelChange)="password.set($event)"
                             name="password"
                             #passwordCtrl="ngModel">
                     </div>
@@ -67,11 +69,6 @@
             </div>
         </div>
 
-        <div class="mt-8 text-center">
-            <a routerLink="/admin/login"
-                class="text-[10px] font-bold text-muted uppercase tracking-widest hover:text-primary transition-colors">
-                Switch to Admin Console
-            </a>
-        </div>
+        
     </div>
 </div>

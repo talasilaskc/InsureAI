@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from "@angular/router";
 import { Sidebar } from "../../components/sidebar/sidebar";
 import { Navbar } from "../../components/navbar/navbar";
+import { CompanyService } from '../../../services/company-service';
 
 @Component({
   selector: 'app-company-layout',
@@ -11,5 +12,5 @@ import { Navbar } from "../../components/navbar/navbar";
   styleUrl: './company-layout.css',
 })
 export class CompanyLayout {
-
+  companyService=inject(CompanyService);
 }

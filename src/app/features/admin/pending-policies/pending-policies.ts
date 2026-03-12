@@ -38,6 +38,8 @@ export class PendingPolicies implements OnInit {
       },
       error: (error) => {
         console.error("Failed to load pending policies", error);
+        const msg = error.error?.message || "Failed to load pending policies";
+        alert(msg);
         this.loading.set(false);
       }
     });
@@ -52,7 +54,8 @@ export class PendingPolicies implements OnInit {
       },
       error: (err) => {
         console.error("Failed to approve policy", err);
-        alert("Action failed. Please try again.");
+        const msg = err.error?.message || "Action failed. Please try again.";
+        alert(msg);
       }
     });
   }
@@ -66,7 +69,8 @@ export class PendingPolicies implements OnInit {
       },
       error: (err) => {
         console.error("Failed to reject policy", err);
-        alert("Action failed. Please try again.");
+        const msg = err.error?.message || "Action failed. Please try again.";
+        alert(msg);
       }
     });
   }

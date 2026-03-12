@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth';
 import { Router, RouterLink } from '@angular/router';
@@ -11,8 +11,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.css',
 })
 export class Login{
-  email: string = '';
-  password: string = '';
+  email = signal<string>('');
+  password = signal<string>('');
 
   authService=inject(AuthService);
   router=inject(Router);
@@ -20,8 +20,8 @@ export class Login{
   login(){
 
   const credentials = {
-    email:this.email,
-    password:this.password
+    email:this.email(),
+    password:this.password()
   }
 
   this.authService.login(credentials).subscribe({

@@ -22,7 +22,7 @@ export class CompanyDashboard implements OnInit, AfterViewInit {
   error = signal(false);   // ⭐ NEW
 
   ngOnInit(): void {
-
+    this.companyService.title.set('Dashboard'); 
     this.companyService.getDashboard().subscribe({
       next:(data:any)=>{
         this.dashboard = data;
@@ -36,6 +36,8 @@ export class CompanyDashboard implements OnInit, AfterViewInit {
       },
       error:(err)=>{
         console.error("Dashboard load failed", err);
+        const msg = err.error?.message || "Dashboard load failed.";
+        alert(msg);
         this.loading.set(false);
         this.error.set(true);   // ⭐ NEW
       }

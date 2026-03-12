@@ -47,6 +47,8 @@ export class ClaimHistory implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to fetch claims", err);
+        const msg = err.error?.message || "Failed to fetch claims";
+        alert(msg);
         this.loading.set(false);
       }
     });

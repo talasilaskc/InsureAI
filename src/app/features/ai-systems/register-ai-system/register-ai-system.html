@@ -9,12 +9,21 @@
 
         <div class="grid md:grid-cols-2 gap-6">
 
-            <input class="input-field" placeholder="AI System Name" formControlName="name">
+            <div class="col-span-1">
+                <input class="input-field" placeholder="AI System Name *" formControlName="name"
+                    [ngClass]="{'border-rose-500': f.name.invalid && f.name.touched}">
+                @if(f.name.invalid && f.name.touched){
+                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Name is required</p>
+                }
+            </div>
 
-            <input class="input-field" placeholder="Version" formControlName="version">
+            <div class="col-span-1">
+                <input class="input-field" placeholder="Version *" formControlName="version">
+            </div>
 
-            <textarea class="input-field md:col-span-2" placeholder="Description" formControlName="description">
-</textarea>
+            <div class="md:col-span-2">
+                <textarea class="input-field" placeholder="Description *" formControlName="description"></textarea>
+            </div>
 
         </div>
     </div>
@@ -30,18 +39,30 @@
 
         <div class="grid md:grid-cols-2 gap-6">
 
-            <select class="input-field" formControlName="ownershipType">
-                <option value="">Select Ownership</option>
-                <option value="OWNED">Owned (In-house)</option>
-                <option value="THIRD_PARTY_API">Third Party API</option>
-            </select>
+            <div class="col-span-1">
+                <select class="input-field" formControlName="ownershipType"
+                    [ngClass]="{'border-rose-500': f.ownershipType.invalid && f.ownershipType.touched}">
+                    <option value="">Select Ownership *</option>
+                    <option value="OWNED">Owned (In-house)</option>
+                    <option value="THIRD_PARTY_API">Third Party API</option>
+                </select>
+                @if(f.ownershipType.invalid && f.ownershipType.touched){
+                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Ownership is required</p>
+                }
+            </div>
 
-            <select class="input-field" formControlName="deploymentType">
-                <option value="">Select Deployment</option>
-                <option value="CLOUD">Cloud</option>
-                <option value="ON_PREM">On Premise</option>
-                <option value="HYBRID">Hybrid</option>
-            </select>
+            <div class="col-span-1">
+                <select class="input-field" formControlName="deploymentType"
+                    [ngClass]="{'border-rose-500': f.deploymentType.invalid && f.deploymentType.touched}">
+                    <option value="">Select Deployment *</option>
+                    <option value="CLOUD">Cloud</option>
+                    <option value="ON_PREM">On Premise</option>
+                    <option value="HYBRID">Hybrid</option>
+                </select>
+                @if(f.deploymentType.invalid && f.deploymentType.touched){
+                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Deployment is required</p>
+                }
+            </div>
 
         </div>
 
@@ -58,29 +79,45 @@
 
         <div class="grid md:grid-cols-2 gap-6">
 
-            <select class="input-field" formControlName="modelType">
-                <option value="">Select Model Type</option>
-                <option value="LLM">Large Language Model (LLM)</option>
-                <option value="NLP">Natural Language Processing (NLP)</option>
-                <option value="CV">Computer Vision (CV)</option>
-                <option value="RISK_ENGINE">Risk Engine</option>
-                <option value="OTHER">Other</option>
-            </select>
+            <div class="col-span-1">
+                <select class="input-field" formControlName="modelType"
+                    [ngClass]="{'border-rose-500': f.modelType.invalid && f.modelType.touched}">
+                    <option value="">Select Model Type *</option>
+                    <option value="LLM">Large Language Model (LLM)</option>
+                    <option value="NLP">Natural Language Processing (NLP)</option>
+                    <option value="CV">Computer Vision (CV)</option>
+                    <option value="RISK_ENGINE">Risk Engine</option>
+                    <option value="OTHER">Other</option>
+                </select>
+                @if(f.modelType.invalid && f.modelType.touched){
+                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Model Type is required</p>
+                }
+            </div>
 
-            <select class="input-field" formControlName="dataExposureCategory">
-                <option value="">Select Data Category</option>
-                <option value="GENERIC">Generic Data</option>
-                <option value="PERSONAL">Personal Data (PII)</option>
-                <option value="FINANCIAL">Financial Data</option>
-                <option value="HEALTH">Health Data</option>
-            </select>
+            <div class="col-span-1">
+                <select class="input-field" formControlName="dataExposureCategory"
+                    [ngClass]="{'border-rose-500': f.dataExposureCategory.invalid && f.dataExposureCategory.touched}">
+                    <option value="">Select Data Category *</option>
+                    <option value="GENERIC">Generic Data</option>
+                    <option value="PERSONAL">Personal Data (PII)</option>
+                    <option value="FINANCIAL">Financial Data</option>
+                    <option value="HEALTH">Health Data</option>
+                </select>
+                @if(f.dataExposureCategory.invalid && f.dataExposureCategory.touched){
+                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 uppercase tracking-widest">Data Category is required</p>
+                }
+            </div>
 
-            <input type="date" class="input-field" formControlName="productionSince">
+            <div class="col-span-1">
+                <input type="date" class="input-field" formControlName="productionSince">
+            </div>
 
-            <label class="flex items-center gap-2">
-                <input type="checkbox" formControlName="businessCritical">
-                Business Critical System
-            </label>
+            <div class="col-span-1 flex items-center">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="businessCritical">
+                    Business Critical System <span class="text-rose-500">*</span>
+                </label>
+            </div>
 
         </div>
 

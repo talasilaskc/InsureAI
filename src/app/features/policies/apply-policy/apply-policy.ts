@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AiSystemService } from '../../../services/ai-system-service';
 import { PolicyService } from '../../../services/policy-service';
 import { CommonModule } from '@angular/common';
+import { CompanyService } from '../../../services/company-service';
 
 @Component({
   selector: 'app-apply-policy',
@@ -20,11 +21,14 @@ export class ApplyPolicy implements OnInit {
   private router = inject(Router);
   private aiService = inject(AiSystemService);
   private policyService = inject(PolicyService);
+  companyService=inject(CompanyService);
 
   systems = signal<any[]>([]);
   policyTypeId = signal<number>(0);
   selectedPolicy = signal<any>(null);
   loading = signal<boolean>(true);
+
+  get f() { return this.form.controls; }
 
   form = this.fb.group({
     aiSystemId: ['', Validators.required],
@@ -34,6 +38,7 @@ export class ApplyPolicy implements OnInit {
   });
 
   ngOnInit() {
+    this.companyService.title.set('Apply Policy');
     const id = Number(this.route.snapshot.paramMap.get('policyId'));
     this.policyTypeId.set(id);
 
@@ -91,7 +96,8 @@ export class ApplyPolicy implements OnInit {
       },
       error: (err) => {
         console.error("Failed to submit policy", err);
-        alert("We encountered an issue submitting your application. Please verify details and try again.");
+        const msg = err.error?.message || "We encountered an issue submitting your application. Please verify details and try again.";
+        alert(msg);
       }
     });
   }

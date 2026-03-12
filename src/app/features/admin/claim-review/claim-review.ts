@@ -47,7 +47,8 @@ export class ClaimReview implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to fetch claims data:", err);
-        alert("An error occurred while fetching claims data.");
+        const msg = err.error?.message || "An error occurred while fetching claims data.";
+        alert(msg);
         this.router.navigate(['/admin/all-claims']);
         this.loading.set(false);
       }
@@ -85,7 +86,8 @@ export class ClaimReview implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to approve claim", err);
-        alert("Verification logic failed to execute.");
+        const msg = err.error?.message || "Verification logic failed to execute.";
+        alert(msg);
         this.processing.set(false);
       }
     });
@@ -104,7 +106,8 @@ export class ClaimReview implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error("Failed to reject claim", err);
-        alert("Rejection logic failed to execute.");
+        const msg = err.error?.message || "Rejection logic failed to execute.";
+        alert(msg);
         this.processing.set(false);
       }
     });

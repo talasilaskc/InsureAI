@@ -31,7 +31,7 @@
             <!-- Company Name -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Legal Entity Name
+                Legal Entity Name <span class="text-rose-500">*</span>
               </label>
               <input type="text" placeholder="Acme AI Inc." class="input-field" formControlName="name"
                 [ngClass]="{'border-rose-500': f.name.invalid && f.name.touched}">
@@ -43,7 +43,7 @@
             <!-- Industry -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Industry Sector
+                Industry Sector <span class="text-rose-500">*</span>
               </label>
               <select class="input-field" formControlName="industry" [ngClass]="{'border-rose-500': f.industry.invalid && f.industry.touched}">
                 <option value="Healthcare AI">Healthcare AI</option>
@@ -60,7 +60,7 @@
             <!-- Country -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Country
+                Country <span class="text-rose-500">*</span>
               </label>
               <input type="text" placeholder="USA" class="input-field" formControlName="country"
                 [ngClass]="{'border-rose-500': f.country.invalid && f.country.touched}">
@@ -72,7 +72,7 @@
             <!-- Company Size -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Company Size
+                Company Size <span class="text-rose-500">*</span>
               </label>
               <select class="input-field" formControlName="companySize" [ngClass]="{'border-rose-500': f.companySize.invalid && f.companySize.touched}">
                 <option value="STARTUP">Startup</option>
@@ -87,7 +87,7 @@
             <!-- Annual Revenue -->
             <div class="md:col-span-2">
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Annual Revenue
+                Annual Revenue <span class="text-rose-500">*</span>
               </label>
               <input type="number" placeholder="1000000" class="input-field" formControlName="annualRevenue"
                 [ngClass]="{'border-rose-500': f.annualRevenue.invalid && f.annualRevenue.touched}">
@@ -110,7 +110,7 @@
             <!-- Email -->
             <div class="md:col-span-2">
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Business Email
+                Business Email <span class="text-rose-500">*</span>
               </label>
               <input type="email" placeholder="admin@company.com" class="input-field" formControlName="email"
                 [ngClass]="{'border-rose-500': f.email.invalid && f.email.touched}">
@@ -122,7 +122,7 @@
             <!-- Password -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Password
+                Password <span class="text-rose-500">*</span>
               </label>
               <input type="password" placeholder="••••••••" class="input-field" formControlName="password"
                 [ngClass]="{'border-rose-500': f.password.invalid && f.password.touched}">
@@ -134,7 +134,7 @@
             <!-- Confirm Password -->
             <div>
               <label class="block text-[10px] font-bold text-ink uppercase tracking-widest mb-2">
-                Confirm Password
+                Confirm Password <span class="text-rose-500">*</span>
               </label>
               <input type="password" placeholder="••••••••" class="input-field" formControlName="confirmPassword"
                 [ngClass]="{'border-rose-500': f.confirmPassword.invalid && f.confirmPassword.touched}">
